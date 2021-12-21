@@ -174,7 +174,7 @@ class TaskController extends Controller
             ->get();
 
         // Check data exists
-        $users = DB::table('users')->where('id', '=', '1')->exists();
+        $users = DB::table('users')->where('email', '=', 'ali82@example.com')->exists();
         if ($users == true) {
             dd("User tồn tại");
         }
