@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\TaskRequest;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
@@ -14,20 +15,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $list = [
-            'id' => 1,
-            'title' => 'Task_1',
-            'description' => 'php exercises',
-            'type' => 'Basic',
-            'status' => 'complete',
-            'start_date' => '2021-12-08',
-            'due_date' => '2021-12-18',
-            'assignee' => 'Ly',
-            'estimate' => '2 days',
-            'actual' => '3 days'
-        ];
+        $tasks = DB::table('tasks')->get();
 
-        return view('admin.tasks')->with('list', $list);
+        return view('admin.tasks')->with('tasks', $tasks);
     }
 
     /**
@@ -46,8 +36,30 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTaskRequest $request)
+    public function store(TaskRequest $request)
     {
+        $title = $request->title;
+        $description = $request->description;
+        $type = $request->type;
+        $status = $request->status;
+        $start_date = $request->start_date;
+        $due_date = $request->due_date;
+        $assignee = $request->assignee;
+        $estimate = $request->estimate;
+        $actual = $request->actual;
+
+        DB::table('tasks')->insert([
+            'title' => $title,
+            'description' => $description,
+            'type' => $type,
+            'status' => $status,
+            'start_date' => $start_date,
+            'due_date' => $due_date,
+            'assignee' => $assignee,
+            'estimate' => $estimate,
+            'actual' => $actual
+        ]);
+
         return redirect()->route('tasks.index');
     }
 
@@ -59,20 +71,9 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $list = [
-            'id' => $id,
-            'title' => 'Task_1',
-            'description' => 'php exercises',
-            'type' => 'Basic',
-            'status' => 'complete',
-            'start_date' => '2021-12-08',
-            'due_date' => '2021-12-18',
-            'assignee' => 'Ly',
-            'estimate' => '2 days',
-            'actual' => '3 days'
-        ];
+        $tasks = DB::table('tasks')->where('id', $id)->get();
 
-        return view('admin.tasks.show')->with('list', $list);
+        return view('admin.tasks.show')->with('tasks', $tasks);
     }
 
     /**
@@ -83,20 +84,9 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        $list = [
-            'id' => $id,
-            'title' => 'Task_1',
-            'description' => 'php exercises',
-            'type' => 'Basic',
-            'status' => 'complete',
-            'start_date' => '2021-12-08',
-            'due_date' => '2021-12-18',
-            'assignee' => 'Ly',
-            'estimate' => '2 days',
-            'actual' => '3 days'
-        ];
+        $tasks = DB::table('tasks')->where('id', $id)->get();
 
-        return view('admin.tasks.edit')->with('list', $list);
+        return view('admin.tasks.edit')->with('tasks', $tasks);
     }
 
     /**
@@ -106,8 +96,30 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTaskRequest $request, $id)
+    public function update(TaskRequest $request, $id)
     {
+        $title = $request->title;
+        $description = $request->description;
+        $type = $request->type;
+        $status = $request->status;
+        $start_date = $request->start_date;
+        $due_date = $request->due_date;
+        $assignee = $request->assignee;
+        $estimate = $request->estimate;
+        $actual = $request->actual;
+
+        DB::table('tasks')->where('id', $id)->update([
+            'title' => $title,
+            'description' => $description,
+            'type' => $type,
+            'status' => $status,
+            'start_date' => $start_date,
+            'due_date' => $due_date,
+            'assignee' => $assignee,
+            'estimate' => $estimate,
+            'actual' => $actual
+        ]);
+
         return redirect()->route('tasks.index');
     }
 
@@ -119,6 +131,53 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
+        DB::table('tasks')->where('id', $id)->delete();
+
         return redirect()->route('tasks.index');
+    }
+
+    public function practice($id)
+    {
+        // Get all tasks 
+        $tasks = DB::table('tasks')->get();
+
+        // Get a data of tasks
+        $task = DB::table('tasks')->where('id', $id)->get();
+
+        // Chunk results the tasks
+        DB::table('tasks')->orderBy('id')->chunk(50, function ($tasks) {
+            foreach ($tasks as $task) {
+                return dd($task->title);
+            }
+        });
+
+        // Count record 
+        $count = DB::table('tasks')->get()->count();
+
+        // Select data of tasks
+        $tasks = DB::table('tasks')->select('title', 'description')->get();
+
+        // // Where query
+        $tasks = DB::table('tasks')->where('estimate', '<', '3')->get();
+
+        // Join table
+        $tasks = DB::table('users')
+            ->join('tasks', 'users.id', '=', 'tasks.assignee')
+            ->where('actual', '<', '3')
+            ->get();
+
+        // Union query
+        $first = DB::table('users')->select('name');
+        $tasks = DB::table('tasks')
+            ->select('description')
+            ->union($first)
+            ->get();
+
+        // Check data exists
+        $users = DB::table('users')->where('id', '=', '1')->exists();
+        if ($users == true) {
+            dd("User tồn tại");
+        }
+        dd("User không tồn tại");
     }
 }

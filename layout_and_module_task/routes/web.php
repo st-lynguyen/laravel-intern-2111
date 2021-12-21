@@ -29,6 +29,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
     Route::patch('/tasks/{id}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+    Route::get('/practice', [TaskController::class, 'practice']);
 });
 
 

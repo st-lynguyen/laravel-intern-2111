@@ -14,37 +14,39 @@
                 <th scope="col">Assignee</th>
                 <th scope="col">Estimate</th>
                 <th scope="col">Actual</th>
-                <th scope="col" style="text-align:center">Tools</th>
+                <th scope="col" style="text-align:center; width: 17%;">Tools</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>{{ $list['id'] }}</td>
-                <td>{{ $list['title'] }}</td>
-                <td>{{ $list['description'] }}</td>
-                <td>{{ $list['type'] }}</td>
-                <td>{{ $list['status'] }}</td>
-                <td>{{ $list['start_date'] }}</td>
-                <td>{{ $list['due_date'] }}</td>
-                <td>{{ $list['assignee'] }}</td>
-                <td>{{ $list['estimate'] }}</td>
-                <td>{{ $list['actual'] }}</td>
-                <td>
-                    <form action="{{ route('tasks.destroy', ['id' => $list['id']]) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <a class="btn btn-info btn-sm px-3" href="{{ route('tasks.show', ['id' => $list['id']]) }}">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <a class="btn btn-primary btn-sm px-3" href="{{ route('tasks.edit', ['id' => $list['id']]) }}">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button type="submit" class="btn btn-danger btn-sm px-3">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </form>
-                </td>
-            </tr>
+            @foreach ($tasks as $task)
+                <tr>
+                    <td>{{ $task->id }}</td>
+                    <td>{{ $task->title }}</td>
+                    <td>{{ $task->description }}</td>
+                    <td>{{ $task->type }}</td>
+                    <td>{{ $task->status }}</td>
+                    <td>{{ $task->start_date }}</td>
+                    <td>{{ $task->due_date }}</td>
+                    <td>{{ $task->assignee }}</td>
+                    <td>{{ $task->estimate }}</td>
+                    <td>{{ $task->actual }}</td>
+                    <td>
+                        <form action="{{ route('tasks.destroy', ['id' => $task->id]) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <a class="btn btn-info btn-sm px-3" href="{{ route('tasks.show', ['id' => $task->id]) }}">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a class="btn btn-primary btn-sm px-3" href="{{ route('tasks.edit', ['id' => $task->id]) }}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button type="submit" class="btn btn-danger btn-sm px-3">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
     <a class="btn btn-success" href="{{ route('tasks.create') }}" style="margin:5% 50%">Add</a>
