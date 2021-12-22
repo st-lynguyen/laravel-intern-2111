@@ -2,7 +2,6 @@
 @section('content')
     <table class="table align-middle">
         <tbody>
-            @foreach ($tasks as $task)
                 <tr>
                     <th>ID</th>
                     <td>{{ $task->id }}</td>
@@ -43,7 +42,6 @@
                     <th>Actual</th>
                     <td>{{ $task->actual }}</td>
                 </tr>
-            @endforeach
         </tbody>
     </table>
     <a href="{{ route('tasks.index') }}" class="btn btn-success btn-icon-split">

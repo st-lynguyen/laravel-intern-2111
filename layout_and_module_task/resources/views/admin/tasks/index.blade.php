@@ -31,15 +31,15 @@
                     <td>{{ $task->estimate }}</td>
                     <td>{{ $task->actual }}</td>
                     <td>
+                        <a class="btn btn-info btn-sm px-3" href="{{ route('tasks.show', ['id' => $task->id]) }}">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a class="btn btn-primary btn-sm px-3" href="{{ route('tasks.edit', ['id' => $task->id]) }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
                         <form action="{{ route('tasks.destroy', ['id' => $task->id]) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <a class="btn btn-info btn-sm px-3" href="{{ route('tasks.show', ['id' => $task->id]) }}">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a class="btn btn-primary btn-sm px-3" href="{{ route('tasks.edit', ['id' => $task->id]) }}">
-                                <i class="fas fa-edit"></i>
-                            </a>
                             <button type="submit" class="btn btn-danger btn-sm px-3">
                                 <i class="fas fa-times"></i>
                             </button>

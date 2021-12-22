@@ -17,13 +17,13 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->text('description');
-            $table->integer('type')->nullable();
-            $table->integer('status')->nullable();
+            $table->unsignedTinyInteger('type')->nullable();
+            $table->unsignedTinyInteger('status')->nullable();
             $table->date('start_date')->nullable();
             $table->date('due_date')->nullable();
             $table->unsignedBigInteger('assignee')->nullable();
-            $table->float('estimate');
-            $table->float('actual');
+            $table->float('estimate', 3, 1);
+            $table->float('actual', 3, 1);
             $table->timestamps();
 
             $table->foreign('assignee')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');

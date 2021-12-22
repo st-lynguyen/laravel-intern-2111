@@ -24,15 +24,15 @@ class TaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:255',
+            'title' => 'required|max:255|unique:tasks',
             'description' => 'required|max:255',
-            'type' => 'required|numeric',
-            'status' => 'required|numeric',
+            'type' => 'required|integer|min:0|max:3',
+            'status' => 'required|integer||min:0|max:6',
             'start_date' => 'required|date|after_or_equal:today',
             'due_date' => 'required|date|after_or_equal:start_date',
-            'assignee' => 'required|numeric',
-            'estimate' => 'required|numeric',
-            'actual' => 'numeric',
+            'assignee' => 'required|integer|min:1',
+            'estimate' => 'required|numeric|between:0,99.9',
+            'actual' => 'numeric|between:0,99.9',
         ];
     }
 
@@ -45,7 +45,9 @@ class TaskRequest extends FormRequest
     {
         return [
             'required' => 'Không được để trống',
+            'unique' => 'Tiêu đề này đã tồn tại',
             'max' => ':attribute Tối đa :max kí tự',
+            'min' => ':attribute lớn hơn hoặc bằng :min',
             'start_date.after_or_equal' => 'Ngày bắt đầu phải là một ngày sau hoặc bằng ngày hôm nay',
             'due_date.after_or_equal' => 'Ngày đến hạn phải sau hoặc bằng ngày bắt đầu',
             'numeric' => 'Vui lòng nhập số',
