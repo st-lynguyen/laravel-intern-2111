@@ -21,7 +21,7 @@ Route::get('admin', function () {
     return view('admin.layout');
 });
 
-Route::name('tasks.')->group(function () {
+Route::prefix('tasks')->name('tasks.')->group(function () {
     Route::get('/tasks', [TaskController::class, 'index'])->name('index');
     Route::get('/tasks/create', [TaskController::class, 'create'])->name('create');
     Route::post('tasks', [TaskController::class, 'store'])->name('store');
@@ -29,9 +29,9 @@ Route::name('tasks.')->group(function () {
     Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('edit');
     Route::patch('/tasks/{id}', [TaskController::class, 'update'])->name('update');
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy'])->name('destroy');
-    Route::get('/practice', [TaskController::class, 'practice']);
 });
 
+Route::get('/practice', [TaskController::class, 'practice']);
 
 
 
