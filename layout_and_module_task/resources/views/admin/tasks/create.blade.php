@@ -1,6 +1,11 @@
 @extends('/admin.layout')
 @section('content')
     <h2>Create Task</h2>
+     @if (Session::has('success'))
+        <div class="alert alert-success" role="alert">
+            {{ Session('success') }}
+        </div>
+    @endif
     <form method="POST" action="{{ route('tasks.store') }}">
         @csrf
         <div class="mb-3">
@@ -53,11 +58,11 @@
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Assignee</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" name="assignee"
-                value="{{ old('assignee') }}" />
-            @error('assignee')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <select name="assignee" class="form-control">
+                @foreach ($users as $user)
+                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Estimate</label>
