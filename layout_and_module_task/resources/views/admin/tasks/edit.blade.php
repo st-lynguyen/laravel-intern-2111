@@ -1,6 +1,11 @@
 @extends('/admin.layout')
 @section('content')
     <h2>Edit Task</h2>
+     @if (Session::has('success'))
+        <div class="alert alert-success" role="alert">
+            {{ Session('success') }}
+        </div>
+    @endif
     <form method="POST" action="{{ route('tasks.update', ['id' => $task->id]) }}">
         @csrf
         @method('PATCH')
@@ -59,11 +64,11 @@
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Assignee</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" name="assignee"
-                value="{{ $task->assignee }}" />
-            @error('assignee')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+            <select name="assignee" class="form-control">
+                @foreach ($users as $user)
+                <option value="{{ $user->id }}" {{ $user->id == $task->assignee ? 'selected' : '' }}>{{ $user->name }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">Estimate</label>

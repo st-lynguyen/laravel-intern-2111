@@ -1,6 +1,11 @@
 @extends('admin.layout')
 
 @section('content')
+    @if (Session::has('success'))
+        <div class="alert alert-success" role="alert">
+            {{ Session('success') }}
+        </div>
+    @endif
     <table class="table align-middle">
         <thead>
             <tr>

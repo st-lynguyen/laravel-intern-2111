@@ -24,7 +24,7 @@ class TaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:255|unique:tasks',
+            'title' => 'required|max:255',
             'description' => 'required|max:255',
             'type' => 'required|integer|min:0|max:3',
             'status' => 'required|integer||min:0|max:6',
@@ -45,7 +45,6 @@ class TaskRequest extends FormRequest
     {
         return [
             'required' => 'Không được để trống',
-            'unique' => 'Tiêu đề này đã tồn tại',
             'max' => ':attribute Tối đa :max kí tự',
             'min' => ':attribute lớn hơn hoặc bằng :min',
             'start_date.after_or_equal' => 'Ngày bắt đầu phải là một ngày sau hoặc bằng ngày hôm nay',

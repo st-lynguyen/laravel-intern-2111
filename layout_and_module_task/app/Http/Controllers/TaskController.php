@@ -27,7 +27,9 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return view('admin.tasks.create');
+        $users = DB::table('users')->select('id', 'name')->get();
+
+        return view('admin.tasks.create')->with('users', $users);
     }
 
     /**
@@ -50,7 +52,7 @@ class TaskController extends Controller
             'actual' => $request->actual
         ]);
 
-        return redirect()->route('tasks.index');
+        return back()->with('success', 'Create Successfully');
     }
 
     /**
@@ -75,8 +77,9 @@ class TaskController extends Controller
     public function edit($id)
     {
         $task = DB::table('tasks')->where('id', $id)->first();
+        $users = DB::table('users')->select('id', 'name')->get();
 
-        return view('admin.tasks.edit')->with('task', $task);
+        return view('admin.tasks.edit', ['task' => $task, 'users' => $users]);
     }
 
     /**
@@ -100,7 +103,7 @@ class TaskController extends Controller
             'actual' => $request->actual
         ]);
 
-        return redirect()->route('tasks.index');
+        return back()->with('success', 'Update Successfully');
     }
 
     /**
@@ -113,7 +116,7 @@ class TaskController extends Controller
     {
         DB::table('tasks')->where('id', $id)->delete();
 
-        return redirect()->route('tasks.index');
+        return back()->with('success', 'Delete Successfully');
     }
 
     public function practice()
@@ -122,8 +125,8 @@ class TaskController extends Controller
         $tasks = DB::table('tasks')->get();
 
         // Get a data of tasks
-        $task = DB::table('tasks')->where('id', '=', '1')->get();
-       
+        $task = DB::table('tasks')->where('id', '=', '1')->first();
+
         // Chunk results the tasks
         DB::table('tasks')->orderBy('id')->chunk(50, function ($tasks) {
             foreach ($tasks as $task) {
@@ -132,7 +135,7 @@ class TaskController extends Controller
         });
 
         // Count record 
-        $count = DB::table('tasks')->get()->count();
+        $count = DB::table('tasks')->count();
 
         // Select data of tasks
         $tasks = DB::table('tasks')->select('title', 'description')->get();
