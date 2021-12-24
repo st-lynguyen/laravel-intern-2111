@@ -16,23 +16,23 @@
                 </tr>
                 <tr>
                     <th>Type</th>
-                    <td>{{ $task->type }}</td>
+                    <td>{{ $task->type_label }}</td>
                 </tr>
                 <tr>
                     <th>Status</th>
-                    <td>{{ $task->status }}</td>
+                    <td>{{ $task->status_label }}</td>
                 </tr>
                 <tr>
                     <th>Start_date</th>
-                    <td>{{ $task->start_date }}</td>
+                    <td>{{ $task->start_date_label }}</td>
                 </tr>
                 <tr>
                     <th>Due_date</th>
-                    <td>{{ $task->due_date }}</td>
+                    <td>{{ $task->due_date_label }}</td>
                 </tr>
                 <tr>
                     <th>Assignee</th>
-                    <td>{{ $task->assignee }}</td>
+                    <td>{{ $task->assignee_label }}</td>
                 </tr>
                 <tr>
                     <th>Estimate</th>

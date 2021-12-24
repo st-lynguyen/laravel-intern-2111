@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CreateTasksTable extends Migration
 {
@@ -25,6 +26,7 @@ class CreateTasksTable extends Migration
             $table->float('estimate', 3, 1);
             $table->float('actual', 3, 1);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('assignee')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });

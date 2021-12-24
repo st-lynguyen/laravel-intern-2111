@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskRequest;
 use Illuminate\Support\Facades\DB;
+use App\Models\Task;
+use App\Models\User;
 
 class TaskController extends Controller
 {
@@ -15,7 +17,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = DB::table('tasks')->get();
+        $tasks = Task::all();
 
         return view('admin.tasks.index')->with('tasks', $tasks);
     }
@@ -27,7 +29,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $users = DB::table('users')->select('id', 'name')->get();
+        $users = User::getUserID();
 
         return view('admin.tasks.create')->with('users', $users);
     }
@@ -40,17 +42,7 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        DB::table('tasks')->insert([
-            'title' => $request->title,
-            'description' => $request->description,
-            'type' => $request->type,
-            'status' => $request->status,
-            'start_date' => $request->start_date,
-            'due_date' => $request->due_date,
-            'assignee' => $request->assignee,
-            'estimate' => $request->estimate,
-            'actual' => $request->actual
-        ]);
+        Task::create($request->all());
 
         return back()->with('success', 'Create Successfully');
     }
@@ -63,7 +55,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = DB::table('tasks')->where('id', $id)->first();
+        $task = Task::GetOneTask($id);
 
         return view('admin.tasks.show')->with('task', $task);
     }
@@ -76,8 +68,8 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        $task = DB::table('tasks')->where('id', $id)->first();
-        $users = DB::table('users')->select('id', 'name')->get();
+        $task = Task::GetOneTask($id);
+        $users = User::getUserID();
 
         return view('admin.tasks.edit', ['task' => $task, 'users' => $users]);
     }
@@ -91,17 +83,8 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, $id)
     {
-        DB::table('tasks')->where('id', $id)->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'type' => $request->type,
-            'status' => $request->status,
-            'start_date' => $request->start_date,
-            'due_date' => $request->due_date,
-            'assignee' => $request->assignee,
-            'estimate' => $request->estimate,
-            'actual' => $request->actual
-        ]);
+        $task = Task::find($id);
+        $task->update($request->all());
 
         return back()->with('success', 'Update Successfully');
     }
@@ -114,7 +97,7 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('tasks')->where('id', $id)->delete();
+        Task::where('id', $id)->delete();
 
         return back()->with('success', 'Delete Successfully');
     }
