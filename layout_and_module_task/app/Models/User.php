@@ -42,8 +42,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function scopeGetUserID()
-    {
-        return User::select('id', 'name')->get();
-    }
 }
