@@ -77,7 +77,7 @@ class TaskController extends Controller
     public function edit($id)
     {
         $task = $this->taskRepository->getTaskById($id);
-        $users = $this->userRepository->getIdAndName();
+        $users = $this->userRepository->getUsers(['id', 'name']);
 
         return view('admin.tasks.edit', ['task' => $task, 'users' => $users]);
     }
