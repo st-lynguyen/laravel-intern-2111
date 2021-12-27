@@ -17,9 +17,9 @@ class UserRepository implements UserRepositoryInterface
         return User::findOrFail($userId);
     }
 
-    public function getIdAndName()
+    public function getUsers($columns)
     {
-        return User::select('id', 'name')->get();
+        return User::select($columns)->get();
     }
 
     public function createUser(array $userDetails)

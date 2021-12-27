@@ -37,7 +37,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $users = $this->userRepository->getIdAndName();
+        $users = $this->userRepository->getUsers(['id','name']);
 
         return view('admin.tasks.create')->with('users', $users);
     }
