@@ -50,7 +50,7 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        $this->taskRepository->createTask($request->all());
+        $this->taskRepository->createTask($request->validated());
 
         return back()->with('success', 'Create Successfully');
     }

@@ -49,14 +49,4 @@ class Task extends Model
         return \Carbon\Carbon::parse($this->due_date)->format('d-m-Y');
     }
 
-    public function getAssigneeLabelAttribute()
-    {
-        $assignees = User::select('id', 'name')->get();
-        foreach ($assignees as $assignee) {
-            if ($assignee->id == $this->assignee) {
-                return $this->assignee = $assignee->name;
-            }
-        }
-    }
-
 }
