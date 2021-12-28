@@ -9,8 +9,8 @@ use App\Interfaces\UserRepositoryInterface;
 
 class TaskController extends Controller
 {
-    private TaskRepositoryInterface $taskRepository;
-    private UserRepositoryInterface $userRepository;
+    private $taskRepository;
+    private $userRepository;
 
     public function __construct(TaskRepositoryInterface $taskRepository, UserRepositoryInterface $userRepository)
     {
