@@ -4,10 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\TaskRequest;
-use Illuminate\Support\Facades\DB;
+use App\Interfaces\TaskRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
 
 class TaskController extends Controller
 {
+    private $taskRepository;
+    private $userRepository;
+
+    public function __construct(TaskRepositoryInterface $taskRepository, UserRepositoryInterface $userRepository)
+    {
+        $this->taskRepository = $taskRepository;
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +25,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = DB::table('tasks')->get();
+        $tasks = $this->taskRepository->getAllTasks();
 
         return view('admin.tasks.index')->with('tasks', $tasks);
     }
@@ -27,7 +37,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $users = DB::table('users')->select('id', 'name')->get();
+        $users = $this->userRepository->getUsers(['id','name']);
 
         return view('admin.tasks.create')->with('users', $users);
     }
@@ -40,17 +50,7 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        DB::table('tasks')->insert([
-            'title' => $request->title,
-            'description' => $request->description,
-            'type' => $request->type,
-            'status' => $request->status,
-            'start_date' => $request->start_date,
-            'due_date' => $request->due_date,
-            'assignee' => $request->assignee,
-            'estimate' => $request->estimate,
-            'actual' => $request->actual
-        ]);
+        $this->taskRepository->createTask($request->validated());
 
         return back()->with('success', 'Create Successfully');
     }
@@ -63,7 +63,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $task = DB::table('tasks')->where('id', $id)->first();
+        $task = $this->taskRepository->getTaskById($id);
 
         return view('admin.tasks.show')->with('task', $task);
     }
@@ -76,8 +76,8 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
-        $task = DB::table('tasks')->where('id', $id)->first();
-        $users = DB::table('users')->select('id', 'name')->get();
+        $task = $this->taskRepository->getTaskById($id);
+        $users = $this->userRepository->getUsers(['id', 'name']);
 
         return view('admin.tasks.edit', ['task' => $task, 'users' => $users]);
     }
@@ -91,17 +91,7 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, $id)
     {
-        DB::table('tasks')->where('id', $id)->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'type' => $request->type,
-            'status' => $request->status,
-            'start_date' => $request->start_date,
-            'due_date' => $request->due_date,
-            'assignee' => $request->assignee,
-            'estimate' => $request->estimate,
-            'actual' => $request->actual
-        ]);
+        $this->taskRepository->updateTask($id, $request->validated());
 
         return back()->with('success', 'Update Successfully');
     }
@@ -114,53 +104,53 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('tasks')->where('id', $id)->delete();
+        $this->taskRepository->deleteTask($id);
 
         return back()->with('success', 'Delete Successfully');
     }
 
-    public function practice()
-    {
-        // Get all tasks 
-        $tasks = DB::table('tasks')->get();
+    // public function practice()
+    // {
+    //     // Get all tasks 
+    //     $tasks = DB::table('tasks')->get();
 
-        // Get a data of tasks
-        $task = DB::table('tasks')->where('id', '=', '1')->first();
+    //     // Get a data of tasks
+    //     $task = DB::table('tasks')->where('id', '=', '1')->first();
 
-        // Chunk results the tasks
-        DB::table('tasks')->orderBy('id')->chunk(50, function ($tasks) {
-            foreach ($tasks as $task) {
-                return dd($task->title);
-            }
-        });
+    //     // Chunk results the tasks
+    //     DB::table('tasks')->orderBy('id')->chunk(50, function ($tasks) {
+    //         foreach ($tasks as $task) {
+    //             return dd($task->title);
+    //         }
+    //     });
 
-        // Count record 
-        $count = DB::table('tasks')->count();
+    //     // Count record 
+    //     $count = DB::table('tasks')->count();
 
-        // Select data of tasks
-        $tasks = DB::table('tasks')->select('title', 'description')->get();
+    //     // Select data of tasks
+    //     $tasks = DB::table('tasks')->select('title', 'description')->get();
 
-        // // Where query
-        $tasks = DB::table('tasks')->where('estimate', '<', '3')->get();
+    //     // // Where query
+    //     $tasks = DB::table('tasks')->where('estimate', '<', '3')->get();
 
-        // Join table
-        $tasks = DB::table('users')
-            ->join('tasks', 'users.id', '=', 'tasks.assignee')
-            ->where('actual', '<', '3')
-            ->get();
+    //     // Join table
+    //     $tasks = DB::table('users')
+    //         ->join('tasks', 'users.id', '=', 'tasks.assignee')
+    //         ->where('actual', '<', '3')
+    //         ->get();
 
-        // Union query
-        $first = DB::table('users')->select('name');
-        $tasks = DB::table('tasks')
-            ->select('description')
-            ->union($first)
-            ->get();
+    //     // Union query
+    //     $first = DB::table('users')->select('name');
+    //     $tasks = DB::table('tasks')
+    //         ->select('description')
+    //         ->union($first)
+    //         ->get();
 
-        // Check data exists
-        $userExists = DB::table('users')->where('email', '=', 'ali82@example.com')->exists();
-        if ($userExists == true) {
-            dd("User tồn tại");
-        }
-        dd("User không tồn tại");
-    }
+    //     // Check data exists
+    //     $userExists = DB::table('users')->where('email', '=', 'ali82@example.com')->exists();
+    //     if ($userExists == true) {
+    //         dd("User tồn tại");
+    //     }
+    //     dd("User không tồn tại");
+    // }
 }
