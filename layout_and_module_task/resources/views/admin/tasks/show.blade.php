@@ -32,7 +32,7 @@
                 </tr>
                 <tr>
                     <th>Assignee</th>
-                    <td>{{ $task->assignee }}</td>
+                    <td>{{ $task->user->name }}</td>
                 </tr>
                 <tr>
                     <th>Estimate</th>

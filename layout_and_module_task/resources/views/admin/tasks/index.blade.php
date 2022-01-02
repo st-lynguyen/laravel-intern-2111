@@ -32,7 +32,7 @@
                     <td>{{ $task->status_label }}</td>
                     <td>{{ $task->start_date_label }}</td>
                     <td>{{ $task->due_date_label }}</td>
-                    <td>{{ $task->assignee }}</td>
+                    <td>{{ $task->user->name }}</td>
                     <td>{{ $task->estimate }}</td>
                     <td>{{ $task->actual }}</td>
                     <td>

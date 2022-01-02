@@ -49,4 +49,8 @@ class Task extends Model
         return \Carbon\Carbon::parse($this->due_date)->format('d-m-Y');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'assignee');
+    }
 }
