@@ -32,8 +32,8 @@ class UserSeeder extends Seeder
                 DB::table('tasks')->insert([
                     'title' => $faker->realText($faker->numberBetween(10, 20)),
                     'description' => $faker->realText($faker->numberBetween(100, 300)),
-                    'type' => $faker->numberBetween(1, 2),
-                    'status' => $faker->numberBetween(1, 2),
+                    'type' => $faker->numberBetween(1, 3),
+                    'status' => $faker->numberBetween(1, 6),
                     'start_date' => $start_date,
                     'due_date' => $due_date,
                     'assignee' => $userID,
