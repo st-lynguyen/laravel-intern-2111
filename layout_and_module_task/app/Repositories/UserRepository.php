@@ -7,6 +7,16 @@ use App\Models\User;
 
 class UserRepository implements UserRepositoryInterface
 {
+    public function getAllUsers()
+    {
+        return User::all();
+    }
+
+    public function getUserById($userId)
+    {
+        return User::findOrFail($userId);
+    }
+    
     public function getUsers($columns)
     {
         return User::select($columns)->get();

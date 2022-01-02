@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\Interfaces\UserRepositoryInterface;
 
 class UserController extends Controller
 {
+    private $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = $this->userRepository->getAllUsers();
 
         return view('admin.users.index', ['users' => $users]);
     }
@@ -48,10 +56,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::findOrFail($id);
-        $tasks = $user->tasks;
+        $user = $this->userRepository->getUserById($id);
 
-        return view('admin.users.show', ['user' => $user, 'tasks' => $tasks]);
+        return view('admin.users.show', ['user' => $user]);
     }
 
     /**

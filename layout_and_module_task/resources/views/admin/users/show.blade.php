@@ -33,18 +33,18 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($tasks as $task)
+            @foreach ($user->tasks as $tasks)
                 <tr>
-                    <td>{{ $task->id }}</td>
-                    <td>{{ $task->title }}</td>
-                    <td>{{ $task->description }}</td>
-                    <td>{{ $task->type }}</td>
-                    <td>{{ $task->status }}</td>
-                    <td>{{ $task->start_date }}</td>
-                    <td>{{ $task->due_date }}</td>
-                    <td>{{ $task->assignee }}</td>
-                    <td>{{ $task->estimate }}</td>
-                    <td>{{ $task->actual }}</td>
+                    <td>{{ $tasks->id }}</td>
+                    <td>{{ $tasks->title }}</td>
+                    <td>{{ $tasks->description }}</td>
+                    <td>{{ $tasks->type }}</td>
+                    <td>{{ $tasks->status }}</td>
+                    <td>{{ $tasks->start_date }}</td>
+                    <td>{{ $tasks->due_date }}</td>
+                    <td>{{ $tasks->assignee }}</td>
+                    <td>{{ $tasks->estimate }}</td>
+                    <td>{{ $tasks->actual }}</td>
                 </tr>
             @endforeach
         </tbody>
